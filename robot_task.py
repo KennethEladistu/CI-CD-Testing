@@ -8,12 +8,16 @@ ARM_SPEED        = 80       # Robot arm speed (mm/s)
 EXTRACTION_DELAY = 1.0      # Delay between actions (seconds)
 TASK_MESSAGE     = "Picking up mail item and placing on letter opener"
 
-# ── Simulate Robot Actions ─────────────────────────────────────────────────────
+# ── Read Version ───────────────────────────────────────────────────────────────
 import time
 
+with open("VERSION", "r") as f:
+    VERSION = f.read().strip()
+
+# ── Simulate Robot Actions ─────────────────────────────────────────────────────
 print("=" * 50)
 print("  ARMOR Kit – Robot Task Runner")
-print(f"  Version         : v1.0.2")
+print(f"  Version         : {VERSION}")
 print(f"  Arm Speed       : {ARM_SPEED} mm/s")
 print(f"  Extraction Delay: {EXTRACTION_DELAY}s")
 print("=" * 50)
