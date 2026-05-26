@@ -12,19 +12,40 @@ updates from the PH team to a deployed unit at a customer site (e.g. Orlando).
 ## How It Works
 
 ```
-[ Laptop A – Pusher (PH Team) ]
-        |
-        |  python scripts/pusher.py
-        v
-[ GitHub Repository ]
-        |
-        |  auto pull every 30 seconds
-        v
-[ Laptop B – Receiver (Customer Site) ]
-        |
-        |  runs robot_task.py automatically
-        v
-[ Updated robot behavior visible on screen ]
+┌──────────────────────────────────┐
+│      Laptop A  (PH Team)         │
+│                                  │
+│  1. Edit robot_task.py           │
+│  2. Run pusher.py                │
+│     --version v1.0.6             │
+│     --message "your change"      │
+└────────────────┬─────────────────┘
+                 │
+                 │  git push
+                 ▼
+┌──────────────────────────────────┐
+│         GitHub Repository        │
+│                                  │
+│   Stores latest code + VERSION   │
+└────────────────┬─────────────────┘
+                 │
+                 │  git fetch every 30 sec
+                 ▼
+┌──────────────────────────────────┐
+│   Laptop B  (Customer Site)      │
+│                                  │
+│  receiver.py running in loop:    │
+│                                  │
+│  New version? ──No──► wait 30s ─┐│
+│       │                         ││
+│      Yes                        ││
+│       │                         ││
+│  git pull                       ││
+│       │                         ││
+│  run robot_task.py              ││
+│       │                         ││
+│  wait 30s ──────────────────────┘│
+└──────────────────────────────────┘
 ```
 
 ---
