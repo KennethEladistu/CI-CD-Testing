@@ -41,31 +41,34 @@ def main():
     print(f"  Polling every {POLL_INTERVAL} seconds...")
     print("=" * 50)
 
-    while True:
-        local = get_local_version()
-        remote = get_remote_version()
+    try:
+        while True:
+            local = get_local_version()
+            remote = get_remote_version()
 
-        if remote is None:
-            print("\n[POLLING] ❌ Could not reach GitHub. Retrying...")
-        else:
-            print(f"\n[POLLING] Local: {local}  |  Remote: {remote}")
-
-            if local == remote:
-                print("  ✅ Already up to date.")
+            if remote is None:
+                print("\n[POLLING] ❌ Could not reach GitHub. Retrying...")
             else:
-                print(f"  🔔 New version detected: {remote}")
-                print("  ⬇️  Pulling update...")
-                _, err, code = run("git pull origin main")
-                if code == 0:
-                    new_version = get_local_version()
-                    print(f"  ✅ Update applied successfully. Now on: {new_version}")
-                    print("\n" + "-" * 50)
-                    subprocess.run("python3 robot_task.py", shell=True)
-                    print("-" * 50)
-                else:
-                    print(f"  ❌ Pull failed: {err}")
+                print(f"\n[POLLING] Local: {local}  |  Remote: {remote}")
 
-        time.sleep(POLL_INTERVAL)
+                if local == remote:
+                    print("  ✅ Already up to date.")
+                else:
+                    print(f"  🔔 New version detected: {remote}")
+                    print("  ⬇️  Pulling update...")
+                    _, err, code = run("git pull origin main")
+                    if code == 0:
+                        new_version = get_local_version()
+                        print(f"  ✅ Update applied successfully. Now on: {new_version}")
+                        print("\n" + "-" * 50)
+                        subprocess.run("python3 robot_task.py", shell=True)
+                        print("-" * 50)
+                    else:
+                        print(f"  ❌ Pull failed: {err}")
+
+            time.sleep(POLL_INTERVAL)
+    except KeyboardInterrupt:
+        print("\n\n  🛑 Receiver stopped.")
 
 
 if __name__ == "__main__":
