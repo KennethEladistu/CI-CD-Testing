@@ -50,42 +50,57 @@ Both laptops need:
 - Python 3.8 or higher
 - Git
 
-### Laptop A (Pusher)
+---
+
+## Laptop A (Pusher — PH Team)
+
+### 1. Clone the repo (one-time setup)
 ```bash
 git clone https://github.com/KennethEladistu/CI-CD-Testing.git
 cd CI-CD-Testing
 ```
 
-### Laptop B (Receiver)
+### 2. Edit `robot_task.py`
+Change arm speed, delay, task message, or any robot behavior.
+
+### 3. Push the update
 ```bash
-git clone https://github.com/KennethEladistu/CI-CD-Testing.git
-cd CI-CD-Testing
-python3 scripts/receiver.py
+python scripts/pusher.py --version v1.0.6 --message "your change here"
 ```
+
+That's it — Laptop B will pick it up automatically within 30 seconds.
 
 ---
 
-## Usage
+## Laptop B (Receiver — Customer Site)
 
-### Pushing an Update (Laptop A)
-
-1. Edit `robot_task.py` — change arm speed, delay, message, etc.
-2. Run the pusher:
+### 1. Clone the repo (one-time setup)
 ```bash
-python scripts/pusher.py --version v1.0.5 --message "increase arm speed to 100"
+git clone https://github.com/KennethEladistu/CI-CD-Testing.git
+cd CI-CD-Testing
 ```
-3. Laptop B picks up the update automatically within 30 seconds.
 
-### What the Pusher Does
-1. Updates the `VERSION` file
+### 2. Start the receiver and leave it running
+```bash
+python3 scripts/receiver.py
+```
+
+No other commands needed. The receiver handles everything automatically.
+
+---
+
+## What Each Script Does
+
+### `pusher.py` (Laptop A)
+1. Updates the `VERSION` file with the new version
 2. Runs `robot_task.py` locally to verify it works
-3. Commits and pushes to GitHub
+3. Commits and pushes to GitHub if the local run succeeds
 
-### What the Receiver Does
+### `receiver.py` (Laptop B)
 1. Polls GitHub every 30 seconds
-2. Detects a new version
-3. Pulls the update
-4. Runs `robot_task.py` automatically
+2. Compares local version vs remote version
+3. Pulls the update if a new version is detected
+4. Runs `robot_task.py` automatically after pulling
 
 ---
 
