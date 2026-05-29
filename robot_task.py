@@ -4,7 +4,7 @@ This is the file that will be updated and pushed to the receiver.
 """
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-ARM_SPEED        = 80      # Robot arm speed (mm/s)
+ARM_SPEED        = 100      # Robot arm speed (mm/s)
 EXTRACTION_DELAY = 1.0      # Delay between actions (seconds)
 TASK_MESSAGE     = "Picking up mail item and placing on letter opener"
 
